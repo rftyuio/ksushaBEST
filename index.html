@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Сюрприз</title>
+
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(135deg, #ffdee9, #b5fffc);
+        font-family: 'Segoe UI', sans-serif;
+        overflow: hidden;
+        height: 100vh;
+        position: relative;
+    }
+
+    /* Парящие сердечки */
+    .heart {
+        position: fixed;
+        color: #ff4b91;
+        font-size: 20px;
+        animation: floatUp 4s linear infinite;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    @keyframes floatUp {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-200px) scale(1.8); opacity: 0; }
+    }
+
+    .floating-btn {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        background: rgba(255,255,255,0.9);
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: .2s;
+        user-select: none;
+    }
+
+    .floating-btn:active {
+        transform: scale(0.85);
+    }
+
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        max-width: 90%;
+        background: white;
+        padding: 20px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        display: none;
+        text-align: center;
+    }
+
+    #bigButton {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 200px;
+        height: 200px;
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        opacity: 0;
+        transition: transform 0.8s ease, opacity 0.8s ease;
+        cursor: pointer;
+        z-index: 50;
+    }
+
+    /* Первый финальный экран */
+    #finalFull {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        padding: 20px;
+        z-index: 100;
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    /* Печатающий текст */
+    #finalText {
+        display: inline-block;
+        font-size: 32px;
+        color: #ff4b91;
+        text-shadow: 0px 2px 10px rgba(0,0,0,0.2);
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 3px solid #ff4b91;
+        animation: typing 4s steps(60) 1, blink 0.7s step-end infinite;
+    }
+
+    @keyframes typing {
+        from { width: 0ch; }
+        to   { width: 60ch; }
+    }
+
+    @keyframes blink {
+        50% { border-color: transparent; }
+    }
+
+    #secondBtn {
+        margin-top: 20px;
+        padding: 15px 35px;
+        font-size: 22px;
+        background: #ff82ae;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.25s;
+        box-shadow: 0 6px 20px rgba(255,0,90,0.3);
+    }
+
+    #secondBtn:active {
+        transform: scale(0.9);
+    }
+
+    /* Второй экран */
+    #finalFull2 {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 30px;
+        z-index: 200;
+        text-align: center;
+    }
+
+    #finalFull2Text {
+        font-size: 40px;
+        color: #ff387a;
+        font-weight: bold;
+        animation: typing2 3s steps(40) 1;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 3px solid #ff387a;
+    }
+
+    @keyframes typing2 {
+        from {width: 0;}
+        to {width: 100%;}
+    }
+</style>
+</head>
+<body>
+
+<audio id="music" src="music.mp3"></audio>
+
+<div id="popup" class="popup">
+    <img id="popupImg" src="" alt="photo" style="width:100%; border-radius:15px;" />
+    <p id="popupText" style="margin-top:10px;"></p>
+</div>
+
+<div id="bigButton">Открыть 💖</div>
+
+<!-- Первый финал -->
+<div id="finalFull">
+    <img id="finalImg" src="pik.jpg" style="max-width:45%; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.3);" />
+    <div>
+        <div id="finalText">Один из лучших дней моей жизни.Ксюша - ты лучшая!!! и очень мне дорога</div>
+        <button id="secondBtn">Нажми меня </button>
+    </div>
+</div>
+
+<!-- Второй финал -->
+<div id="finalFull2">
+    <img id="finalImg" src="picc.jpg" style="max-width:45%; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.3);" />
+    <div id="finalFull2Text">Небольшой подарок. забирай на той самой почте;]</div>
+</div>
+
+<script>
+    /* Парящие сердечки */
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = window.innerHeight + "px";
+        heart.style.fontSize = (20 + Math.random() * 25) + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 4000);
+    }, 500);
+
+    const data = [
+        {img: 'pik1.jpg', text: 'Первая победа надо мной помниш?'},
+        {img: 'pik2.jpg', text: 'Все еще стоит на обоях к слову'},
+        {img: 'pik3.jpg', text: 'сердешко помниш?'},
+        {img: 'pik5.jpg', text: 'Мое сердце кричит!!'}
+    ];
+
+    let clicked = [false, false, false, false];
+    let buttons = [];
+
+    function createButtons() {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        data.forEach((item, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'floating-btn';
+            btn.innerText = 'Нажми';
+
+            const x = Math.random() * (w - 140);
+            const y = Math.random() * (h - 140);
+
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+
+            btn.onclick = () => openPopup(i);
+            document.body.appendChild(btn);
+            buttons.push(btn);
+        });
+    }
+
+    function openPopup(i) {
+        // показываем попап с данными
+        document.getElementById('popupImg').src = data[i].img;
+        document.getElementById('popupText').innerText = data[i].text;
+        document.getElementById('popup').style.display = 'block';
+
+        clicked[i] = true;
+
+        // БЕЗ автозакрытия!
+        if (clicked.every(v => v)) mergeButtons();
+    }
+
+    function mergeButtons() {
+        const cx = window.innerWidth / 2 - 60;
+        const cy = window.innerHeight / 2 - 60;
+
+        buttons.forEach(btn => {
+            btn.style.transition = "1s ease";
+            btn.style.left = cx + 'px';
+            btn.style.top = cy + 'px';
+            btn.style.transform = 'scale(0)';
+            btn.style.opacity = '0';
+        });
+
+        setTimeout(() => {
+            const b = document.getElementById('bigButton');
+            b.style.transform = 'translate(-50%, -50%) scale(1)';
+            b.style.opacity = '1';
+        }, 1000);
+    }
+
+    document.getElementById('bigButton').onclick = () => {
+        document.getElementById('finalFull').style.display = 'flex';
+        document.getElementById("music").play();
+    };
+
+    document.getElementById('secondBtn').onclick = () => {
+        document.getElementById('finalFull2').style.display = 'flex';
+    };
+
+    createButtons();
+</script>
+
+</body>
+</html>
