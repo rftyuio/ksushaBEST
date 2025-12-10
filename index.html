@@ -10,7 +10,7 @@
         margin: 0;
         background: linear-gradient(135deg, #ffdee9, #b5fffc);
         font-family: 'Segoe UI', sans-serif;
-        overflow: hidden;
+        overflow-x: hidden;
         height: 100vh;
         position: relative;
     }
@@ -42,12 +42,13 @@
         align-items: center;
         justify-content: center;
         font-size: 18px;
-        transition: .2s;
+        transition: .3s;
         user-select: none;
+        z-index: 10;
     }
 
     .floating-btn:active {
-        transform: scale(0.85);
+        transform: scale(0.88);
     }
 
     .popup {
@@ -56,13 +57,14 @@
         left: 50%;
         transform: translate(-50%, -50%);
         width: 300px;
-        max-width: 90%;
+        max-width: 95%;
         background: white;
         padding: 20px;
         border-radius: 18px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
         display: none;
         text-align: center;
+        z-index: 999;
     }
 
     #bigButton {
@@ -70,22 +72,22 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) scale(0);
-        width: 200px;
-        height: 200px;
+        width: 220px;
+        height: 220px;
         background: white;
         border-radius: 30px;
         box-shadow: 0 12px 40px rgba(0,0,0,0.35);
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 22px;
+        font-size: 24px;
         opacity: 0;
         transition: transform 0.8s ease, opacity 0.8s ease;
         cursor: pointer;
         z-index: 50;
     }
 
-    /* Первый финальный экран */
+    /* Финальный экран */
     #finalFull {
         position: fixed;
         top: 0;
@@ -96,32 +98,35 @@
         display: none;
         justify-content: center;
         align-items: center;
-        gap: 40px;
         padding: 20px;
         z-index: 100;
-        flex-wrap: wrap;
+        flex-direction: column;
         text-align: center;
     }
 
-    /* Печатающий текст */
     #finalText {
-        display: inline-block;
-        font-size: 32px;
+        font-size: 30px;
         color: #ff4b91;
         text-shadow: 0px 2px 10px rgba(0,0,0,0.2);
         overflow: hidden;
         white-space: nowrap;
         border-right: 3px solid #ff4b91;
-        animation: typing 4s steps(60) 1, blink 0.7s step-end infinite;
+        animation: typing 4s steps(40) 1, blink 0.7s step-end infinite;
+        max-width: 100%;
     }
 
     @keyframes typing {
-        from { width: 0ch; }
-        to   { width: 60ch; }
+        from { width: 0; }
+        to   { width: 100%; }
     }
 
-    @keyframes blink {
-        50% { border-color: transparent; }
+    @media (max-width: 600px) {
+        #finalText {
+            font-size: 22px;
+            white-space: normal;
+            border-right: none;
+            animation: none;
+        }
     }
 
     #secondBtn {
@@ -141,7 +146,6 @@
         transform: scale(0.9);
     }
 
-    /* Второй экран */
     #finalFull2 {
         position: fixed;
         top: 0;
@@ -162,15 +166,27 @@
         font-size: 40px;
         color: #ff387a;
         font-weight: bold;
-        animation: typing2 3s steps(40) 1;
-        overflow: hidden;
-        white-space: nowrap;
-        border-right: 3px solid #ff387a;
+        max-width: 90%;
     }
 
-    @keyframes typing2 {
-        from {width: 0;}
-        to {width: 100%;}
+    @media (max-width: 600px) {
+        .floating-btn {
+            width: 90px;
+            height: 90px;
+            font-size: 14px;
+        }
+
+        #bigButton {
+            width: 260px;
+            height: 260px;
+            font-size: 28px;
+        }
+
+        #finalFull img,
+        #finalFull2 img {
+            max-width: 90%;
+            margin-bottom: 20px;
+        }
     }
 </style>
 </head>
@@ -185,19 +201,15 @@
 
 <div id="bigButton">Открыть 💖</div>
 
-<!-- Первый финал -->
 <div id="finalFull">
-    <img id="finalImg" src="pik.jpg" style="max-width:45%; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.3);" />
-    <div>
-        <div id="finalText">Один из лучших дней моей жизни.Ксюша - ты лучшая!!! и очень мне дорога</div>
-        <button id="secondBtn">Нажми меня </button>
-    </div>
+    <img src="pik.jpg" style="max-width:70%; border-radius:20px;" />
+    <div id="finalText">Один из лучших дней моей жизни. Ксюша – ты лучшая!!! и очень мне дорога ❤️</div>
+    <button id="secondBtn">Нажми меня</button>
 </div>
 
-<!-- Второй финал -->
 <div id="finalFull2">
-    <img id="finalImg" src="picc.jpg" style="max-width:45%; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.3);" />
-    <div id="finalFull2Text">Небольшой подарок. забирай на той самой почте;]</div>
+    <img src="picc.jpg" style="max-width:70%; border-radius:20px;" />
+    <div id="finalFull2Text">Небольшой подарок. забирай на той самой почте ;]</div>
 </div>
 
 <script>
@@ -213,11 +225,12 @@
         setTimeout(() => heart.remove(), 4000);
     }, 500);
 
+
     const data = [
-        {img: 'pik1.jpg', text: 'Первая победа надо мной помниш?'},
-        {img: 'pik2.jpg', text: 'Все еще стоит на обоях к слову'},
-        {img: 'pik3.jpg', text: 'сердешко помниш?'},
-        {img: 'pik5.jpg', text: 'Мое сердце кричит!!'}
+        { img: 'pik1.jpg', text: 'Первая победа надо мной помнишь?' },
+        { img: 'pik2.jpg', text: 'Все еще стоит на обоях к слову' },
+        { img: 'pik3.jpg', text: 'Сердечко помнишь?' },
+        { img: 'pik5.jpg', text: 'Моё сердце кричит!!' }
     ];
 
     let clicked = [false, false, false, false];
@@ -228,51 +241,47 @@
         const h = window.innerHeight;
 
         data.forEach((item, i) => {
+            if (clicked[i]) return; // скрывать нажатые кнопки
+
             const btn = document.createElement('div');
             btn.className = 'floating-btn';
             btn.innerText = 'Нажми';
 
-            const x = Math.random() * (w - 140);
-            const y = Math.random() * (h - 140);
+            const x = 20 + Math.random() * (w - 160);
+            const y = 80 + Math.random() * (h - 200);
 
             btn.style.left = x + 'px';
             btn.style.top = y + 'px';
 
             btn.onclick = () => openPopup(i);
             document.body.appendChild(btn);
+
             buttons.push(btn);
         });
     }
 
     function openPopup(i) {
-        // показываем попап с данными
-        document.getElementById('popupImg').src = data[i].img;
-        document.getElementById('popupText').innerText = data[i].text;
-        document.getElementById('popup').style.display = 'block';
+        buttons.forEach(b => b.remove());
+        buttons = [];
+
+        document.getElementById("popupImg").src = data[i].img;
+        document.getElementById("popupText").innerText = data[i].text;
+        document.getElementById("popup").style.display = "block";
 
         clicked[i] = true;
 
-        // БЕЗ автозакрытия!
-        if (clicked.every(v => v)) mergeButtons();
+        setTimeout(() => {
+            document.getElementById("popup").style.display = "none";
+            createButtons();
+
+            if (clicked.every(v => v === true)) showBigButton();
+        }, 4000);
     }
 
-    function mergeButtons() {
-        const cx = window.innerWidth / 2 - 60;
-        const cy = window.innerHeight / 2 - 60;
-
-        buttons.forEach(btn => {
-            btn.style.transition = "1s ease";
-            btn.style.left = cx + 'px';
-            btn.style.top = cy + 'px';
-            btn.style.transform = 'scale(0)';
-            btn.style.opacity = '0';
-        });
-
-        setTimeout(() => {
-            const b = document.getElementById('bigButton');
-            b.style.transform = 'translate(-50%, -50%) scale(1)';
-            b.style.opacity = '1';
-        }, 1000);
+    function showBigButton() {
+        const b = document.getElementById('bigButton');
+        b.style.transform = 'translate(-50%, -50%) scale(1)';
+        b.style.opacity = '1';
     }
 
     document.getElementById('bigButton').onclick = () => {
@@ -280,9 +289,8 @@
         document.getElementById("music").play();
     };
 
-    document.getElementById('secondBtn').onclick = () => {
+    document.getElementById('secondBtn').onclick = () =>
         document.getElementById('finalFull2').style.display = 'flex';
-    };
 
     createButtons();
 </script>
